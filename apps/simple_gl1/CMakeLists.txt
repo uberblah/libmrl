@@ -1,0 +1,5 @@
+
+set(here ${CMAKE_CURRENT_LIST_DIR})
+
+add_executable(simple_gl1 ${here}/simple_gl1.c)
+target_link_libraries(simple_gl1 mrl glfw ${GLFW_LIBRARIES})

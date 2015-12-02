@@ -1,0 +1,24 @@
+
+set(here ${CMAKE_CURRENT_LIST_DIR})
+
+#add_subdirectory(engram)
+
+#set(MRL_AI_SOURCES ${MRL_AI_SOURCES}
+#)
+
+#set(MRL_AI_LINK_LIBRARIES ${MRL_AI_LINK_LIBRARIES}
+#)
+
+#add_library(mrl_ai STATIC ${MRL_AI_SOURCES})
+#target_link_libraries(mrl_ai ${MRL_AI_LINK_LIBRARIES})
+
+set(MRL_SOURCES
+  ${MRL_SOURCES}
+  ${MRL_AI_SOURCES}
+  PARENT_SCOPE)
+
+set(MRL_LINK_LIBRARIES
+  ${MRL_LINK_LIBRARIES}
+  ${MRL_AI_LINK_LIBRARIES}
+  PARENT_SCOPE)
+

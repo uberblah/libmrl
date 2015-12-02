@@ -1,0 +1,29 @@
+A NEW BUILD SYSTEM IS NEEDED
+
+all it needs to do, is assume that every subdirectory is a new sub-library
+it can name the sub-library after its location in the tree
+
+the configuration of such a system would just be a file in each directory that specifies what kinds of libraries to build, whether to look for a main, whether to include everything from some outside directory, what include directories to use when processing items in this one.
+
+EXAMPLE USING THIS PROJECT'S DIRECTORY STRUCTURE...
+mrl
+|
+-->gake.scm: ((INCLUDE ".") (SUBDIRS "mrl"))
+-->mrl
+   |
+   -->gake.scm: ((BUILD STATIC SHARED) (SUBDIRS "gen" "ui" "ai" "net" "exec" "3d" "test"))
+   -->gen
+      |
+      -->gake.scm: ((BUILD STATIC SHARED) (SOURCES "pair.c" "list.c" "alist.c" "pool.c") (HEADERS "pair.h" "list.h" "alist.h" "pool.h"))
+      ...
+   -->ui
+   -->ai
+   -->net
+   -->exec
+      |
+      -->gake.scm: ((BUILD STATIC SHARED) (SUBDIRS "emu"))
+      ...
+   -->3d
+   -->test
+      |
+      -->gake.scm: ((BUILD EXECUTABLES) ??)

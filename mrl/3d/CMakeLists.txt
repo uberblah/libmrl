@@ -1,0 +1,24 @@
+
+set(here ${CMAKE_CURRENT_LIST_DIR})
+
+#add_subdirectory(addsub)
+
+#set(MRL_3D_SOURCES ${MRL_3D_SOURCES}
+#)
+
+#set(MRL_3D_LINK_LIBRARIES ${MRL_3D_LINK_LIBRARIES}
+#)
+
+#add_library(mrl_3d STATIC ${MRL_3D_SOURCES})
+#target_link_libraries(mrl_3d ${MRL_3D_LINK_LIBRARIES})
+
+set(MRL_SOURCES
+  ${MRL_SOURCES}
+  ${MRL_3D_SOURCES}
+  PARENT_SCOPE)
+
+set(MRL_LINK_LIBRARIES
+  ${MRL_LINK_LIBRARIES}
+  ${MRL_3D_LINK_LIBRARIES}
+  PARENT_SCOPE)
+
