@@ -3,7 +3,8 @@ enable_testing()
 set(PROJECT_NAME mrl)
 project(${PROJECT_NAME} C)
 include_directories(.)
-add_subdirectory(3p)
-add_subdirectory(mrl)
 
+set(here ${CMAKE_CURRENT_LIST_DIR})
+
+add_subdirectory(mrl)
 add_subdirectory(apps)
