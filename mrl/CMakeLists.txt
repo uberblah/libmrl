@@ -4,6 +4,7 @@ add_subdirectory(exec)
 add_subdirectory(net)
 add_subdirectory(ui)
 add_subdirectory(3d)
+add_subdirectory(str)
 add_subdirectory(test)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic")
