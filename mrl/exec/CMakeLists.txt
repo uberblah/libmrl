@@ -9,6 +9,7 @@ add_subdirectory(emu)
 #add_subdirectory(schyme)
 
 set(MRL_EXEC_SOURCES ${MRL_EXEC_SOURCES}
+  ${here}/crdl.c
 )
 
 set(MRL_EXEC_LINK_LIBRARIES ${MRL_EXEC_LINK_LIBRARIES}

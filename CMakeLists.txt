@@ -7,4 +7,4 @@ include_directories(.)
 set(here ${CMAKE_CURRENT_LIST_DIR})
 
 add_subdirectory(mrl)
-add_subdirectory(apps)
+#add_subdirectory(apps)

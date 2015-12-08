@@ -13,8 +13,9 @@ void list_free(list l, void(*freer)(void*))
     list curs = l;
     while(curs)
     {
+	list doomed;
 	freer(list_car(curs));
-	list doomed = curs;
+	doomed = curs;
 	curs = list_cdr(curs);
 	free(doomed);
     }
