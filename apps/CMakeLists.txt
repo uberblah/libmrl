@@ -1,3 +1,6 @@
 add_subdirectory(simple_gl1)
 add_subdirectory(optimized_gl1)
 add_subdirectory(gl+)
+add_subdirectory(neural)
+add_subdirectory(eup)
+add_subdirectory(cutter)

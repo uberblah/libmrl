@@ -1,11 +1,11 @@
 
 set(here ${CMAKE_CURRENT_LIST_DIR})
 
-add_executable(simple_gl1 ${here}/simple_gl1.c)
+add_executable(eup ${here}/eup.c)
 
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(simple_gl1
+target_link_libraries(eup
   mrl
   glfw
   ${OPENGL_LIBRARIES}

@@ -1,0 +1,167 @@
+<html>
+  <head>
+    <style>
+      body {
+      background-color: #99aa99;
+      margin-top: 1mm;
+      margin-bottom: 5cm;
+      font-family: "Times New Roman", "Times", "serif";
+      }
+
+      h3 {
+      margin-top: 1mm;
+      margin-bottom: 1mm;
+      font-size: 5mm;
+      }
+
+      h4 {
+      margin-top: 5mm;
+      margin-bottom: 2mm;
+      font-size: 4mm;
+      }
+
+      h5 {
+      margin-top: 1mm;
+      margin-bottom: 2mm;
+      margin-left: 5mm;
+      margin-right: 1cm;
+      font-size: 4mm;
+      }
+
+      hr {
+      size: 1mm;
+      }
+
+      p {
+      margin-top: 1mm;
+      margin-bottom: 2mm;
+      margin-left: 5mm;
+      margin-right: 1cm;
+      font-size: 4mm;
+      }
+
+      ul {
+      margin-top: 0mm;
+      margin-bottom: 2mm;
+      font-size: 4mm;
+      }
+
+      ol {
+      margin-top: 0mm;
+      margin-bottom: 2mm;
+      font-size: 4mm;
+      }
+      
+      tangent {
+      display: block;
+      unicode-bidi: embed;
+      margin-top: 1mm;
+      margin-bottom: 2mm;
+      margin-left: 5mm;
+      margin-right: 1cm;
+      font-size: 4mm;
+      background-color: #999977
+      }
+      
+      code {
+      margin-top: 1mm;
+      margin-bottom: 2mm;
+      margin-left: 5mm;
+      margin-right: 1cm;
+      font-size: 3mm;
+      background-color: #997777
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Specifications for a Speculative EUP Environment</h3>
+    <p>Miles Rufat-Latre</p>
+    <hr/>
+    
+    <h4>Motive and General Description</h4>
+    <p>
+      The system being examined is an idea I had more than a year ago. It is designed for public use, and for flexibility, to be capable of tackling any domain via libraries.
+    </p>
+    <p>
+      The design of the environment was driven by a desire to represent all data and operations on them directly as objects and events on-screen. The rules of the design are as follows...
+      <ol>
+	<li>All data must have a type.</li>
+	<li>A given type must be displayed in a way that is intuitive (lists as lists, callable functions as buttons, etc.)</li>
+	<li>If an operation is possible on a type, there must be a user action that would immediately perform that operation.</li>
+	<li>All rules should be as global as possible. Exceptions are annoying and hard to memorize.</li>
+      </ol>
+    </p>
+    <p>
+      To summarize the rules above, I wanted the rules of the interface to be as strong an analogy to the rules of the types and operations behind it as possible, and I wanted the rules to be as consistent as possible, to the point where everything in the environment could be learned as "if I see A, then I should be able to do B".
+    </p>
+    <hr/>
+    
+    <h4>Mechanics of the System</h4>
+    <h5>Top-Level</h5>
+    <p>
+      When opening the program, the user will be presented with a list of mappings from names of globals to values of those globals, and some empty space for new data on a single-color or single-texture background (the workspace), and a set of menus at the top for changing general preferences. The user can load state, save state, or manipulate items in the initial, default workspace.
+    </p>
+    <p>
+      A saved workspace, when reloaded, should present exactly the same data that existed when it was saved, in the same positions. It should be equivalent to "pausing" the editor, saving its state and reloading that state later. Configuration of the editor settings should be saved in a user-specific file, not in individual workspace-savefiles.
+    </p>
+    <p>
+      The user can click on the background of the workspace for a dropdown menu of different kinds of data they can create, and upon selecting one should be presented with a new datum of that type whose values can be edited immediately, in the same position as the original click.
+    </p>
+    <p>
+      An "Undo" operation should be assigned to the Ctrl-Z binding, which reverts the state of the workspace (and indicates what action is being undone with bright, bold text in some corner of the workspace) but cannot revert the state of items outside the workspace (files, stateful devices, etc.). Data affected by an undo operation should flash when the operation occurs.
+    </p>
+    <h5>General Type Information</h5>
+    <p>
+      The type system is based on LISP, so the only built-in structural type is lists.
+    </p>
+    <p>
+      All types must be displayed using a widget of some kind, and that widget must have some area where clicking and dragging would allow the user to move the widget around the workspace.
+    </p>
+    <p>
+      All types must have a collapsed representation that guarantees a certain maximum height and width. This representation is used when storing the items in lists, or if for some other reason the user wants to minimize the object. The user must be able to perform this collapsing and expansion on all types using only the controls on the widget, unless the contents of the datum can be fully and intuitively displayed in a representation satisfying the size limitation for collapsed representations.
+    </p>
+    <p>
+      Data of all types should be deletable, but this action must be more complicated than safer ones. To accomplish this, right-clicking on a datum should provide a context menu (which may be expanded for other purposes) containing a "delete" option.
+    </p>
+    <h5>Lists</h5>
+    <p>
+      Lists are represented as stacks of widgets, where each widget is an element of the list. Data contained by lists are displayed in collapsed form. If an object in a list is expanded by the user, the expansion is produced to the side of the list, and with a dotted line to its entry in the list. In this state, a leftward arrow will also appear next to the entry which, when clicked, collapses the item back into the list, eliminating the dotted line as well.
+    </p>
+    <p>
+      The user can drag a list around the workspace by clicking and dragging its first item. Clicking and dragging other items separates that item and any following it into a separate list.
+    </p>
+    <p>
+      Lists have headers with upward arrows that can be clicked on to collapse the list to a single widget with a rightward arrow which when clicked expands the list again. A collapsed list has the collapsed version of its first item with a "..." to indicate it is a list beginning with that item.
+    </p>
+    <p>
+      Dragging one datum to a position just below another will cause the bottom of the upper datum to glow brightly. Releasing the datum at that point will create a new list with the top datum as the first item, and the bottom as the second. Both data will be collapsed simultaneously.
+    </p>
+    <p>
+      Lists can be extended by dragging items to the bottom of the list in the same fashion as for creating a list. If the user drags an item over the middle of a list, the two nearest atoms will part, and their edges facing the new gap will glow to indicate that if the user were to release the item now, that item would be inserted into the list at the highlighted position.
+    </p>
+    <p>
+      The difference between appending one list's contents to another and appending the list itself as an item is a bit ambiguous, so I had to come up with a workaround, which is that when you drag a list into another, a dropdown menu will appear to let you specify "insert list" or "insert contents".
+    </p>
+    <h5>Numbers and Strings</h5>
+    <p>
+      Numbers and strings are displayed as text printed on a rectangular widget fitted to the size of the text. Strings are displayed with quotes around their values to indicate their type.
+    </p>
+    <p>
+      Simply clicking on a number or a string will allow the user to edit the value directly, temporarily replacing the text on the widget with a text field, until the user presses Enter or other keys suggesting they've moved on to a different task.
+    </p>
+    <h5>Functions</h5>
+    <p>
+      Functions are considered a kind of data, and can be displayed in the same space as other data.
+    </p>
+    <p>
+      When collapsed, a function is displayed as a button. Clicking the button calls the function on the arguments it stores. If the function has any empty argument slots, the button is disabled (grayed out), and the right arrow allowing the user to expand the function turns bright red. Clicking on this arrow expands the function, revealing its argument slots and body.
+    </p>
+    <p>
+      The full (expanded) form of a function has three columns headed by the button that calls the function. The first column is a list of argument names. The second column stores the values for these arguments, but can be empty. The third column is the body of the function, which is a list of (fully parameterized) function invocations.
+    </p>
+    <p>
+      Invocations in the body of a function can refer to argument slots of the function calling it (the user can drag the argument slot names of the current function into the argument slot values of inner invocations).
+    </p>
+    <hr/>
+  </body>
+</html>

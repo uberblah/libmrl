@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include <mrl/gen/list.h>
 
 
 
@@ -9,7 +10,7 @@ int main(int argc, char** argv)
     if (!glfwInit())
 	return -1;
 
-    window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "Data Mastery", NULL, NULL);
     if (!window)
     {
 	glfwTerminate();

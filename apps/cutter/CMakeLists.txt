@@ -1,11 +1,11 @@
 
 set(here ${CMAKE_CURRENT_LIST_DIR})
 
-add_executable(simple_gl1 ${here}/simple_gl1.c)
+add_executable(cutter ${here}/cutter.c)
 
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(simple_gl1
+target_link_libraries(cutter
   mrl
   glfw
   ${OPENGL_LIBRARIES}
