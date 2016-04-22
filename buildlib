@@ -1,0 +1,102 @@
+#!/usr/bin/env guile
+!#
+
+(use-modules (ice-9 match)
+	     (ice-9 ftw)
+	     (ice-9 regex)
+	     (ice-9 pretty-print)
+	     (srfi srfi-1)
+	     (srfi srfi-26)
+	     (srfi srfi-14))
+
+(define (runcmd cmd)
+  (display cmd) (newline)
+  (system cmd))
+
+(primitive-load "config.scm")
+#| WARNING!!
+config.scm MUST define the following symbols
+
+(is-srcfile? path)
+(compile srcfile outname)
+(link srcfiles outname)
+
+|#
+
+(define sep file-name-separator-string)
+(define sepset (string->char-set sep))
+
+(define (parsepath path)
+  (string-split path sepset))
+(define (makepath lst)
+  (string-join lst sep))
+
+(define (_compile srcdir srcfile? objdir compile)
+  (define (proc name stats flag)
+    (define lspath (parsepath name))
+    (case flag
+      ((directory)
+       (let ((opath (makepath (cons objdir (cdr lspath)))))
+	 (if (not (file-exists? opath))
+	     (begin
+	       (runcmd (string-append "mkdir " opath))
+	       #t)
+	     #t)))
+      ((regular)
+       (if (srcfile? name)
+	   (let* ((opath (string-append (makepath (cons objdir (cdr lspath))) ".o"))
+		  (renew (not
+			  (and (file-exists? opath)
+			       (> (stat:mtime (stat opath)) (stat:mtime stats))))))
+	     (if renew
+		 (begin
+		   (compile name opath)
+		   #t)
+		 #t))
+	   #t))))
+  (ftw srcdir proc))
+
+;;(file-system-fold enter? leaf down up skip error init file-name [stat])
+;;(enter? path stat result)
+;;(down path stat result)
+;;(up path stat result)
+;;(skip path stat result)
+;;(leaf path stat init)
+;;(error path stat errno result)
+
+(define (_link objdir objfile? libdir link)
+  (define (menter? path stats result) #t)
+  (define (mdown path stats result) (cons '() result))
+  (define (mup path stats result)
+    (define objs (car result))
+    (if (null? objs)
+	(cdr result)
+	(begin
+	  (let* ((lspath (parsepath path))
+		 (tgt (string-append (makepath (cons libdir (cdr lspath))) ".a"))
+		 (pdir (if (> (length lspath) 1)
+			   (makepath (cons libdir (reverse (cdr (reverse (cdr lspath))))))
+			   libdir)))
+	    (if (not (file-exists? pdir))
+		(runcmd (string-append "mkdir -p " pdir)))
+	    (link objs tgt)
+	    (cons (append objs (cadr result)) (cddr result))))))
+  (define (mskip path stats result) result)
+  (define (mleaf path stats result)
+    (define libname
+      (string-append (makepath (cons libdir (cdr (reverse (cdr (reverse (parsepath path))))))) ".a"))
+    (if (and (file-exists? libname)
+	     (< (stat:mtime stats) (stat:mtime (stat libname))))
+	result
+	(cons (cons path (car result)) (cdr result))))
+  (define (merror path stats errno result) (display (list 'error path (strerror errno))) result)
+  (file-system-fold menter? mleaf mdown mup mskip merror '(()) objdir))
+
+;;(define (proc name stat flag)
+;;  (pretty-print (cons name flag))
+;;  #t)
+;;
+;;(ftw srcdir proc)
+
+(_compile srcdir srcfile? objdir compile)
+(_link objdir objfile? libdir link)
