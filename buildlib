@@ -17,10 +17,10 @@
 #| WARNING!!
 config.scm MUST define the following symbols
 
-(is-srcfile? path)
+(srcfile? path)
+(objfile? path)
 (compile srcfile outname)
 (link srcfiles outname)
-
 |#
 
 (define sep file-name-separator-string)
@@ -56,14 +56,6 @@ config.scm MUST define the following symbols
 	   #t))))
   (ftw srcdir proc))
 
-;;(file-system-fold enter? leaf down up skip error init file-name [stat])
-;;(enter? path stat result)
-;;(down path stat result)
-;;(up path stat result)
-;;(skip path stat result)
-;;(leaf path stat init)
-;;(error path stat errno result)
-
 (define (_link objdir objfile? libdir link)
   (define (menter? path stats result) #t)
   (define (mdown path stats result) (cons '() result))
@@ -91,12 +83,6 @@ config.scm MUST define the following symbols
 	(cons (cons path (car result)) (cdr result))))
   (define (merror path stats errno result) (display (list 'error path (strerror errno))) result)
   (file-system-fold menter? mleaf mdown mup mskip merror '(()) objdir))
-
-;;(define (proc name stat flag)
-;;  (pretty-print (cons name flag))
-;;  #t)
-;;
-;;(ftw srcdir proc)
 
 (_compile srcdir srcfile? objdir compile)
 (_link objdir objfile? libdir link)
